@@ -16,3 +16,6 @@ PCLab.pl-HighResolutionPictures.user.js - replaces original pictures in news and
 PCLab.pl-UnfoldNews.user.js - load all content of all the news on the main news page, no need to clik "more" button.
 
 PurePC.pl-ArticleOnSinglePage.user.js - allows to display multi page article on single page, user can now jump to certain pages and back via table of contents on top of the page. Also text in the article is now justified from edge to edge and cookies popup is removed.
+
+PurePC.pl-HighResolutionPictures.user.js - replaces original pictures in news and articles with their higher quality versions, where available. Script runs after 5 seconds allowing for displaying article on single page first.
+
