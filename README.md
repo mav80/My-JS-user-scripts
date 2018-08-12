@@ -1,6 +1,8 @@
 ﻿# My-JS-user-scripts
 Here comes some of my javascript user scripts that changes the look of a few websites to my liking.
 
+Anandtech.com-HighResolutionPictures.user.js - replaces original pictures in news and articles with their higher quality versions, where available.
+
 ArsTechnica-BetterQualityPictures.user.js - attempts to change pictures in the articles (and main page) to their bigger resolution versions, where available.
 
 Joemonster-FixMainPage.user.js - removes old articles and boxes that looks like articles but are not from the main page. Affects only first page, page 2 and higher are unaffected.
