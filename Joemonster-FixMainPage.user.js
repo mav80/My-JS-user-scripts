@@ -1,6 +1,6 @@
-// ==UserScript==
+﻿// ==UserScript==
 // @name         Joemonster-FixMainPage.user.js
-// @version      1.0
+// @version      1.1
 // @description  Leaves only fresh articles on main page of the site, removes all unnecessary/old articles and stuff. Affects only first page, pages 2 and higher are unaffected
 // @author       Witcher
 // @updateURL    https://mav.matcom.com.pl/MyJSUserScripts/Joemonster-FixMainPage.user.js
@@ -84,6 +84,47 @@
         });
 
     }
+
+
+
+    //here we remove all articles without author - movies, pewex ads etc
+
+    var articleDivs = $('#main').find('.indexart');
+    console.log(articleDivs.length);
+
+    for(var j = 0; j < articleDivs.length ; j++) {
+
+        console.log($(articleDivs[j]).attr('data-author'));
+
+        if($(articleDivs[j]).attr('data-author') == null) {
+            console.log("Hiding element " + j);
+            $(articleDivs[j]).hide();
+        }
+
+
+
+
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
