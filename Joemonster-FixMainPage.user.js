@@ -32,15 +32,15 @@
 
 
 
-    //This part hides article named "Ciekawe w¹tki na forach JM"
+    //This part hides article named "Ciekawe wÄ…tki na forach JM"
 
     var textProp = 'textContent' in document ? 'textContent' : 'innerText';
 
     // directly converting the found 'a' elements into an Array,
     // then iterating over that array with Array.prototype.forEach():
     [].slice.call(document.querySelectorAll('a'), 0).forEach(function(aEl) {
-        // if the text of the aEl Node contains the text 'Ciekawe w¹tki na forach JM':
-        if (aEl[textProp].indexOf('Ciekawe w¹tki na forach JM') > -1) {
+        // if the text of the aEl Node contains the text 'Ciekawe wÄ…tki na forach JM':
+        if (aEl[textProp].indexOf('Ciekawe wÄ…tki na forach JM') > -1) {
             // we update its style:
             console.log('Hiding element ' + aEl);
             aEl.parentElement.style.display="none";

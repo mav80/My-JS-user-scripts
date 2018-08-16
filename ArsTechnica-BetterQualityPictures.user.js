@@ -1,179 +1,124 @@
+
+Tampermonkey®
+v4.7 by Jan Biniok
+Edit - ArsTechnica-BetterQualityPictures.user.js
+Installed userscripts
+Settings
+Utilities
+Help
+	
+ArsTechnica-BetterQualityPictures.user.js
+by Witcher
+Editor
+Settings
+File
+Edit
+Selection
+Find
+GoTo
+Developer
+
+1
 // ==UserScript==
+2
 // @name         ArsTechnica-BetterQualityPictures.user.js
-// @version      1.2
+3
+// @version      1.2.1
+4
 // @description  This script changes all pictures in articles and pictures from feature stories on main page of ArsTechnica.com to their better resolution versions where available. Mobile version of site only.
+5
 // @author       Witcher
+6
 // @updateURL    https://mav.matcom.com.pl/MyJSUserScripts/ArsTechnica-BetterQualityPictures.user.js
+7
 // @downloadURL  https://mav.matcom.com.pl/MyJSUserScripts/ArsTechnica-BetterQualityPictures.user.js
+8
 // @match        https://arstechnica.com/*
+9
 // @grant        none
+10
 // ==/UserScript==
-
+11
+?
+12
 (function() {
+13
     'use strict';
-
+14
+?
+15
     //console.log('works!');
-
+16
+?
+17
     /////////////////////////////////////////////////////////////////////////////////////////////////////////// - feature story images on main page
-
+18
+?
+19
     var mainPageFeatureStoryPictureElements = document.getElementsByClassName('img-holder');
+20
     console.log('Main page feature story images: ' + mainPageFeatureStoryPictureElements.length);
-
+21
+?
+22
     if(mainPageFeatureStoryPictureElements.length > 0) {
+23
         for(var m = 0; m < mainPageFeatureStoryPictureElements.length ; m++) {
+24
             if(mainPageFeatureStoryPictureElements[m].style.backgroundImage != null) {
-
+25
+?
+26
                 console.log("Trying to get better quality for main page feature story picture number " + (m+1) + " using regex method.");
-
+27
+?
+28
                 var linkToChange = mainPageFeatureStoryPictureElements[m].style.backgroundImage;
-
+29
+?
+30
                 console.log("Original image address: " + linkToChange);
-
+31
+?
+32
                 var modifiedLink = linkToChange.replace(/(\w+)(-\d+x\d+)(\.\w+"\)$)/, "$1$3"); //we're looking for three groups of text, second one is resolution in format "NUMBERSxNUMBERS". Then we discard second group and use only group 1 and 3
-
+33
+?
+34
                 console.log("Modified image address: " + modifiedLink);
+35
                 console.log("Checking if image from modified link exists...");
-
+36
+?
+37
                 var http = new XMLHttpRequest();
+38
                 http.open('HEAD', modifiedLink, false);
+39
                 http.send();
-
+40
+?
+41
                 if(http.status == "200"){
+42
                     console.log("...it does. Replacing original picture with better quality version.");
+43
                     mainPageFeatureStoryPictureElements[m].style.backgroundImage = modifiedLink;
+44
                 } else {
+45
                     console.log("...it doesn't, aborting.");
+46
                 }
+47
             }
+48
         }
+49
     }
-
+50
+?
+51
     console.log("Done replacing feature story images on main page.");
-
-///////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-
-
-
-
-
-
-
-/////////////////////////////////////////////////////////////////////////////////////////////////////////// - single images in article page
-
-    var pictureElements = document.getElementsByClassName('full-width');
-    console.log('pictureElements: ' + pictureElements.length);
-
-    if(pictureElements.length > 0) {
-        for(var i = 0; i < pictureElements.length ; i++) {
-            if(pictureElements[i].firstElementChild.href != null) {
-                console.log("Picture number " + (i+1) + " of better quality found, replacing.");
-                console.log("Replacing this: " + pictureElements[i].firstElementChild.firstElementChild.src);
-                console.log("with this: " + pictureElements[i].firstElementChild.href);
-                pictureElements[i].firstElementChild.firstElementChild.src = pictureElements[i].firstElementChild.href;
-                pictureElements[i].firstElementChild.firstElementChild.srcset = ""; //remove srcset content (lower res image address) so that browser won't load it
-            } else {
-                console.log("No better quality found for picture number " + (i+1) + " using basic method, now trying different method.");
-
-                linkToChange = pictureElements[i].firstElementChild.src;
-
-                console.log("Original image address: " + linkToChange);
-
-                 modifiedLink = linkToChange.replace(/(\w+)(-\d+x\d+)(\.\w+$)/, "$1$3"); //we're looking for three groups of text, second one is resolution in format "NUMBERSxNUMBERS". Then we discard second group and use only group 1 and 3
-
-                console.log("Modified image address: " + modifiedLink);
-                console.log("Checking if image from modified link exists...");
-
-                http = new XMLHttpRequest();
-                http.open('HEAD', modifiedLink, false);
-                http.send();
-
-                if(http.status == "200"){
-                    console.log("...it does. Replacing original picture with better quality version.");
-                    pictureElements[i].firstElementChild.src = modifiedLink;
-                } else {
-                    console.log("...it doesn't, aborting.");
-                }
-            }
-        }
-    }
-
-    console.log("Done replacing single images in article.");
-
-///////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-
-
-
-
-
-
-
-/////////////////////////////////////////////////////////////////////////////////////////////////////////// - mobile version galleries
-
-    //here we change first picture in every gallery found right after first page loads
-    var galleryImages = document.getElementsByClassName('gallery-image-wrap');
-    console.log('Number of mobile galleries found: ' + galleryImages.length);
-
-
-    if(galleryImages.length > 0) {
-        for(var j = 0; j < galleryImages.length ; j++) {
-            if(galleryImages[j].firstElementChild.href != null) {
-                console.log('Replacing first picture in gallery number ' + (j+1));
-                galleryImages[j].firstElementChild.firstElementChild.src = galleryImages[j].firstElementChild.href;
-            }
-        }
-
-        //here we replace current picture in every gallery found after every click and after short pause (to allow gallery to change pictures)
-
-        document.addEventListener('click', function () {
-            setTimeout(function() {
-                if(galleryImages.length > 0) {
-                    for(var k = 0; k < galleryImages.length ; k++) {
-                        if(galleryImages[k].firstElementChild.href != null) {
-                            console.log('Replacing picture in gallery number ' + (k+1));
-                            galleryImages[k].firstElementChild.firstElementChild.src = galleryImages[k].firstElementChild.href;
-                        }
-                    }
-                }
-            }, 300); //0,3 second delay
-        });
-    }
-
-///////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-
-
-
-
-
-
-
-/////////////////////////////////////////////////////////////////////////////////////////////////////////// - full version galleries - not functional now, TBD later if at all
-
-
-    var fullVersionGalleries = document.getElementsByClassName('lightSlider');
-
-    if(fullVersionGalleries.length > 0){
-
-
-        console.log('Number of full version galleries founds: ' + fullVersionGalleries.length);
-        console.log(fullVersionGalleries);
-
-        console.log(fullVersionGalleries[0].firstElementChild);
-        console.log(fullVersionGalleries[0].firstElementChild.dataset.thumb);
-        console.log(fullVersionGalleries[0].firstElementChild.dataset.src);
-
-        fullVersionGalleries[0].firstElementChild.dataset.thumb = fullVersionGalleries[0].firstElementChild.dataset.src;
-        fullVersionGalleries[0].firstElementChild.dataset.responsive = "";
-
-        fullVersionGalleries[0].lastElementChild.dataset.thumb = fullVersionGalleries[0].lastElementChild.dataset.src;
-        fullVersionGalleries[0].lastElementChild.dataset.responsive = "";
-
-        //images are replaced correctly, but slider does not refresh them. So it's necessery to somehow either replace them earlier, force refresh after replacing or change slider to the one from mobile version.
-
-    }
-
-///////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-})();
+52
+?
